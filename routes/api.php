@@ -30,5 +30,6 @@ Route::prefix('user')->group(function() {
 
 Route::group(['prefix' => 'calculation', 'middleware' => 'jwt-auth'], function()
 {
-    Route::post('cashbox', 'CalculationController@cashboxAdd');
+    Route::post('', 'CalculationController@cashbox');
+    Route::get('', 'CalculationController@showCashbox');
 });
