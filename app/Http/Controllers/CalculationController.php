@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Calculation;
+use App\WorkersSalaries;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -18,9 +19,16 @@ class CalculationController extends Controller
             'income.others' => 'integer',
 
             'costs.shopping' => 'integer',
-            'costs.salaries' => 'integer',
+            'costs.salaries.*' => 'integer',
             'costs.others' => 'integer',
         ]);
+            $salaries_sum = 0;
+            foreach ($request['costs']['salaries'] as $key => $value)
+            {
+                $worker[$key] = $value;
+                $salaries_sum += $value;
+            }
+
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
@@ -36,11 +44,11 @@ class CalculationController extends Controller
         isset($income['others']) ?: $income['others'] = 0;
 
         isset($costs['shopping']) ?: $costs['shopping'] = 0;
-        isset($costs['salaries']) ?: $costs['salaries'] = 0;
+
         isset($costs['others']) ?: $costs['others'] = 0;
 
         $income_sum = ($income['takings'] + $income['reservations'] + $income['others']);
-        $costs_sum = ($costs['shopping'] + $costs['salaries'] + $costs['others']);
+        $costs_sum = ($costs['shopping'] + $salaries_sum + $costs['others']);
 
         $cashbox = ($cashbox_a + $income_sum) - $costs_sum;
 
@@ -55,7 +63,7 @@ class CalculationController extends Controller
         $calculation->income_sum = $income_sum;
 
         $calculation->shopping = $costs['shopping'];
-        $calculation->salaries = $costs['salaries'];
+        $calculation->salaries = $salaries_sum;
         $calculation->costs_others = $costs['others'];
         $calculation->costs_sum = $costs_sum;
 
@@ -64,6 +72,17 @@ class CalculationController extends Controller
         $calculation->day_of_the_week = date('l');
 
         $calculation->save();
+
+        foreach ($worker as $key => $value)
+        {
+            $salary = new WorkersSalaries;
+            $salary->user_id = Auth::user()->id;
+            $salary->calculation_id = $calculation->id;
+            $salary->worker_id = $key;
+            $salary->salary = $value;
+
+            $salary->save();
+        }
 
         return response()->json(['response' => 'succes', 'message' => ['PLN_gr' => $cashbox, 'PLN' => number_format($cashbox / 100, 2)]], 200);
     }
