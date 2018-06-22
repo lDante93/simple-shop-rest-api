@@ -24,7 +24,7 @@ Route::prefix('user')->group(function() {
     });
     Route::middleware('jwt-auth')->get('logout', function(){
         JWTAuth::invalidate(JWTAuth::getToken());
-        return response()->json(['user'=>'logged_out'], 205);
+        return response()->json(['response'=>'success', 'result'=>'logged out'], 200);
     });
 });
 

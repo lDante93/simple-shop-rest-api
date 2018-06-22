@@ -22,13 +22,13 @@ class CalculationController extends Controller
             'costs.salaries.*' => 'integer',
             'costs.others' => 'integer',
         ]);
-            $salaries_sum = 0;
-            foreach ($request['costs']['salaries'] as $key => $value)
-            {
+        $salaries_sum = 0;
+        if (isset($request['costs']['salaries'])) {
+            foreach ($request['costs']['salaries'] as $key => $value) {
                 $worker[$key] = $value;
                 $salaries_sum += $value;
             }
-
+        }
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
@@ -73,18 +73,19 @@ class CalculationController extends Controller
 
         $calculation->save();
 
-        foreach ($worker as $key => $value)
-        {
-            $salary = new WorkersSalaries;
-            $salary->user_id = Auth::user()->id;
-            $salary->calculation_id = $calculation->id;
-            $salary->worker_id = $key;
-            $salary->salary = $value;
+        if (isset($worker)) {
+            foreach ($worker as $key => $value) {
+                $salary = new WorkersSalaries;
+                $salary->user_id = Auth::user()->id;
+                $salary->calculation_id = $calculation->id;
+                $salary->worker_id = $key;
+                $salary->salary = $value;
 
-            $salary->save();
+                $salary->save();
+            }
         }
 
-        return response()->json(['response' => 'succes', 'message' => ['PLN_gr' => $cashbox, 'PLN' => number_format($cashbox / 100, 2)]], 200);
+        return response()->json(['response' => 'succes', 'message' => ['PLN_raw' => $cashbox, 'PLN' => number_format($cashbox / 100, 2)]], 200);
     }
 
     public function showCashbox(Request $request)

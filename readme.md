@@ -1,6 +1,6 @@
 # Register
 
-Used to collect a Token for a registered User.
+Used to register an user's account.
 
 **URL** : `/api/user/register/`
 
@@ -32,7 +32,7 @@ Used to collect a Token for a registered User.
 
 ## Success Response
 
-**Code** : `200 OK`
+**Code** : `201 Created`
 
 **Content example**
 
@@ -88,5 +88,29 @@ Used to collect a Token for a registered User.
     "result": {
         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMlwvYXBpXC91c2VyXC9sb2dpbiIsImlhdCI6MTUyOTY2OTA1OCwiZXhwIjoxNTI5NjcyNjU4LCJuYmYiOjE1Mjk2NjkwNTgsImp0aSI6IkFtcm5rZDJ0MVRSVnF3UGwiLCJzdWIiOjIsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEiLCJ1c2VyIjp7ImlkIjoyfX0.d9HaKkMGfh7xbu7tRgV7_zzvGiNUfsGPP1lQEj6sSpI"
     }
+}
+```
+
+# Logout
+
+Used to expire a Token.
+
+**URL** : `/api/user/logout/`
+
+**Method** : `GET`
+
+**Auth required** : YES
+
+
+## Success Response
+
+**Code** : `200 OK`
+
+**Content example**
+
+```json
+{
+    "response": "success",
+    "result" : "logged out"
 }
 ```
