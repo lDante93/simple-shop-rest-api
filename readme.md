@@ -125,22 +125,22 @@ Used to expire a Token.
 
 **Auth required** : YES
 
-*Data constraints**
+**Data constraints**
 
 ```json
 {
-	"cashbox_a": [required][integer][initial amount of money in cashbox],
+	"cashbox_a": "[required][integer][initial amount of money in cashbox]",
 	"income": {
-		"takings" : [required][integer][daily takings],
-		"reservations": [optional][integer],
-		"others" : [optional][integer]
+		"takings" : "[required][integer][daily takings]",
+		"reservations": "[optional][integer]",
+		"others" : "[optional][integer]"
 	},
-	"costs" : { [required]
-		"shopping" : [optional][integer],
-		"salaries": { [optional]
-			[string][worker id]: [integer]
+	"costs" : { 
+		"shopping" : "[optional][integer]",
+		"salaries": { 
+			"[optional[string][worker id]": "[integer]"
 		},
-		"others": [optional[integer]
+		"others": "[optional[integer]"
 	}
 }
 ```
