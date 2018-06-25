@@ -90,9 +90,36 @@ class CalculationController extends Controller
 
     public function showCashbox(Request $request)
     {
+        $calculation = Calculation::where('user_id', Auth::user()->id)->get();
+
+        return response()->json($calculation, 200);
+    }
+
+    public function showCashboxAll(Request $request)
+    {
         $calculation = Calculation::all();
-        // Get calculations added by the current user only:
-        // $calculation = Calculation::where('user_id', Auth::user->id)->get();
+
+        return response()->json($calculation, 200);
+    }
+
+    public function showCashboxDateToNow($date)
+    {
+        $date = date('Y-m-d H:i:s', $date);
+        $endDate = date('Y-m-d H:i:s', time());
+
+        $calculation = Calculation::whereBetween('created_at', [$date, $endDate])->get();
+
+        return response()->json($calculation, 200);
+    }
+
+    public function showCashboxDateBetween($date1, $date2)
+    {
+
+        $date = date('Y-m-d H:i:s', $date1);
+        $endDate = date('Y-m-d H:i:s', $date2);
+
+        $calculation = Calculation::whereBetween('created_at', [$date, $endDate])->get();
+
         return response()->json($calculation, 200);
     }
 }

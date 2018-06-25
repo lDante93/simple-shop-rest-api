@@ -32,4 +32,7 @@ Route::group(['prefix' => 'calculation', 'middleware' => 'jwt-auth'], function()
 {
     Route::post('', 'CalculationController@cashbox');
     Route::get('', 'CalculationController@showCashbox');
+    Route::get('all', 'CalculationController@showCashboxAll');
+    Route::get('{date}', 'CalculationController@showCashboxDateToNow');
+    Route::get('{date1}/{date2}', 'CalculationController@showCashboxDateBetween');
 });
